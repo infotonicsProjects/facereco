@@ -5,8 +5,8 @@ import {
   loadSsdMobilenetv1Model,
 } from "face-api.js";
 import { useEffect } from "react";
+import { MODEL_URL } from "./contants";
 
-const MODEL_URL = "/models";
 const Detection = ({ children }) => {
   useEffect(() => {
     const loadModels = async () => {

@@ -7,7 +7,7 @@ import {
   resizeResults,
 } from "face-api.js";
 import ImageNext from "next/image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addModels } from "@/store/slicer";
@@ -78,7 +78,7 @@ const QueryDetect = () => {
       dataImages = JSON.parse(localStorage.getItem("dataImages"));
       setTimeout(() => {
         processImagesForRecognition(dataImages);
-      }, 1000);
+      }, 1500);
     }
     const imageArr = [];
     images.map((item) => {

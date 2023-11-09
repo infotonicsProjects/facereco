@@ -14,20 +14,22 @@ const WebcamComponten = ({ capture, webcamRef }) => {
   };
   return (
     <div className="mt-5 flex flex-col items-center justify-center">
-      <div className="rounded-full overflow-hidden">
-        <Webcam
-          audio={false}
-          height={800}
-          screenshotFormat="image/png"
-          width={800}
-          ref={webcamRef}
-          imageSmoothing={true}
-          mirrored={true}
-          onUserMediaError={handleCameraisnotenbel}
-          screenshotQuality={1}
-          videoConstraints={videoConstraints}
-          className="yasir"
-        />
+      <div>
+        <div className="rounded-full overflow-hidden">
+          <Webcam
+            audio={false}
+            height={300}
+            screenshotFormat="image/png"
+            width={300}
+            ref={webcamRef}
+            imageSmoothing={true}
+            mirrored={true}
+            onUserMediaError={handleCameraisnotenbel}
+            screenshotQuality={1}
+            videoConstraints={videoConstraints}
+            className=""
+          />
+        </div>
       </div>
       <button
         onClick={capture}
