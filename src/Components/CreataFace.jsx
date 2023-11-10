@@ -72,6 +72,7 @@ const CreataFace = () => {
 
     if (files) {
       const images = [];
+      const files = [];
       refImgElements.current = [];
       setRecognitionError("");
       for (let index = 0; index < event.target.files.length; index++) {
@@ -81,6 +82,15 @@ const CreataFace = () => {
             name: image.name,
             src: URL.createObjectURL(image),
           });
+          // image convert to base64
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            files.push({ name: image.name, src: reader.result });
+            if (files.length <= 2) {
+              localStorage.setItem("files", JSON.stringify(files));
+            }
+          };
+          reader.readAsDataURL(image);
         }
       }
       setDataSetImages(images);
@@ -146,7 +156,7 @@ const CreataFace = () => {
         >
           <label
             htmlFor="multiFileSelect"
-            className={"fileUpload border p-2 border-yellow-500 mb-5"}
+            className={"fileUpload border p-2 border-yellow-500 mb-5 mt"}
           >
             <span>
               <i className="bi bi-upload "></i>

@@ -29,7 +29,7 @@ const QueryDetect = () => {
     "/img/shallysir.jpeg",
   ];
   const [queryImage, setQueryImage] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   // const queryCanvasElement = useRef([]);
   const queryImageElement = useRef([]);
   const [srcImage, setSrcImage] = useState([]);
@@ -49,6 +49,7 @@ const QueryDetect = () => {
           const faceDescription = await detectSingleFace(imageEle)
             .withFaceLandmarks()
             .withFaceDescriptor();
+          console.log("run", imageEle);
           if (!faceDescription) {
             console.log(faceDescription);
             alert("take a clear photo");
@@ -67,19 +68,21 @@ const QueryDetect = () => {
     );
     dispatch(addModels(faceMatcher));
     toast.success("Face capture");
-
     setIsLoading(false);
   };
-
   useEffect(() => {
     if (Object.keys(faceMatcher).length === 0) {
       faceMatcher = JSON.parse(localStorage.getItem("faceMatcher"));
       dispatch(addModels(faceMatcher));
-      dataImages = JSON.parse(localStorage.getItem("dataImages"));
+      dataImages = JSON.parse(localStorage.getItem("files"));
       setTimeout(() => {
         processImagesForRecognition(dataImages);
-      }, 1500);
+      }, 4000);
+    } else {
+      setIsLoading(false);
     }
+  }, []);
+  useEffect(() => {
     const imageArr = [];
     images.map((item) => {
       fetch(item)
@@ -98,13 +101,24 @@ const QueryDetect = () => {
   const handleQueryImage = (event) => {
     if (event?.target?.files && event?.target?.files[0]) {
       setRecognitionError("");
+      const imageArr = [];
+      const srcArr = [];
+      for (let i = 0; i < event.target.files.length; i++) {
+        const item = event.target.files[i];
+        imageArr.push({ src: URL.createObjectURL(item) });
+        const imageEle = new Image();
+        imageEle.src = URL.createObjectURL(item);
+        srcArr.push(imageEle);
+      }
       const image = event.target.files[0];
-      setQueryImage([{ src: URL.createObjectURL(image) }]);
+      setQueryImage(imageArr);
+      setSrcImage(srcArr);
     }
   };
 
   //   query images
   const loadRecognizedFaces = async () => {
+    setQueryImage([]);
     const resultArr = [];
     if (Object.keys(faceMatcher).length !== 0) {
       setRecognitionError("");
@@ -131,7 +145,6 @@ const QueryDetect = () => {
             }
             if (srcImage.length - 1 === i) {
               setIsLoading(false);
-              console.log("run");
             }
             // return new draw.DrawBox(res.detection.box, {
             //   label: bestMatch.toString(),
@@ -145,6 +158,7 @@ const QueryDetect = () => {
     } else {
       toast.error("no model face matcher");
     }
+    setIsLoading(false);
   };
   const addImageRef = (index, ref) => {
     queryImageElement.current[index] = ref;
@@ -184,6 +198,7 @@ const QueryDetect = () => {
           accept="image/jpeg, image/png, image/webp"
           onChange={handleQueryImage}
           hidden
+          multiple
         />
       </div>
       {isLoading ? (
@@ -191,7 +206,7 @@ const QueryDetect = () => {
           className="border p-2 mt-5 hover:border-red-700 hover:scale-105"
           disable
         >
-          reconising...
+          wait...
         </button>
       ) : (
         <button
@@ -200,7 +215,7 @@ const QueryDetect = () => {
           }}
           className="border p-2 mt-5 hover:border-red-700 hover:scale-105"
         >
-          reconised
+          Reconised
         </button>
       )}
     </div>

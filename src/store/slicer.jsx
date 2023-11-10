@@ -12,8 +12,11 @@ export const userSlicer = createSlice({
     addModels: (state, action) => {
       state.models = action.payload;
     },
+    setLoadingRedux: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
 });
-export const { addModels } = userSlicer.actions;
+export const { addModels, setLoadingRedux } = userSlicer.actions;
 
 export default userSlicer.reducer;
