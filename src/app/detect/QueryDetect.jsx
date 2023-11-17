@@ -110,7 +110,6 @@ const QueryDetect = () => {
         imageEle.src = URL.createObjectURL(item);
         srcArr.push(imageEle);
       }
-      const image = event.target.files[0];
       setQueryImage(imageArr);
       setSrcImage(srcArr);
     }
@@ -138,10 +137,9 @@ const QueryDetect = () => {
             if (bestMatch.label !== "unknown") {
               resultArr.push(imageEle);
               setQueryImage(resultArr);
-            } else {
-              if (resultArr.length === 0 && srcImage.length - 1 === i) {
-                toast.error("No face image found");
-              }
+            } else if (resultArr.length === 0 && srcImage.length - 1 === i) {
+              toast.error("No face image found");
+              setIsLoading(false);
             }
             if (srcImage.length - 1 === i) {
               setIsLoading(false);
